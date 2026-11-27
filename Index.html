@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Gustave</title>
+<style>
+body{margin:0;font-family:Arial;background:#0f172a;color:white;display:flex;flex-direction:column;height:100vh}
+header{background:#1e293b;padding:15px;text-align:center;font-size:22px;font-weight:bold}
+header span{color:#22c55e}
+#chat{flex:1;padding:15px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:85%;padding:12px;border-radius:15px;line-height:1.5}
+.user{background:#22c55e;color:black;align-self:flex-end}
+.ai{background:#1e293b;align-self:flex-start}
+#ecrire{background:white;padding:12px;border-top:4px solid #22c55e}
+#ecrire p{margin:0 0 8px 0;color:black;font-weight:bold}
+#box{display:flex;gap:8px}
+input{flex:1;padding:15px;border:3px solid #22c55e;border-radius:15px;font-size:16px;outline:none}
+button{padding:15px;border:none;border-radius:15px;font-weight:bold;font-size:15px}
+.envoyer{background:#22c55e}
+.verifier{background:#facc15}
+</style>
+</head>
+<body>
+<header>AI <span>GUSTAVE</span></header>
+<div id="chat">
+<div class="msg ai">Salut ! Je suis AI Gustave. Écris ta question en bas 👇</div>
+</div>
+<div id="ecrire">
+<p>✍️ ÉCRIS ICI 👇</p>
+<div id="box">
+<input id="input" placeholder="Écris ta question ici...">
+<button class="envoyer" onclick="envoyer()">Envoyer</button>
+<button class="verifier" onclick="verifier()">✅ Vérifier</button>
+</div>
+</div>
+<script>
+function envoyer(){
+let input=document.getElementById("input");
+let texte=input.value.trim();
+if(texte=="") return;
+let chat=document.getElementById("chat");
+chat.innerHTML+=`<div class="msg user">${texte}</div>`;
+input.value="";
+chat.innerHTML+=`<div class="msg ai">✅ J'ai reçu : ${texte}<br><br>Dis-moi, c'est pour quelle matière ? Maths, Français, Anglais ?</div>`;
+chat.scrollTop=chat.scrollHeight;
+}
+function verifier(){
+let chat=document.getElementById("chat");
+chat.innerHTML+=`<div class="msg ai">✅ VÉRIFICATION<br><br>Écris en bas : Ma réponse : ...<br>Et je te dis si c'est juste ou faux.</div>`;
+chat.scrollTop=chat.scrollHeight;
+}
+</script>
+</body>
+</html>
