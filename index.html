@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI GUSTAVE - ÉCOLE</title>
+<style>
+body{margin:0;font-family:Arial;background:#f2f2f2;}
+.header{background:#1e88e5;color:white;padding:20px;text-align:center;}
+.header h1{margin:0;font-size:22px;}
+.header p{margin:5px 0 0;font-size:14px;}
+.matieres{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:12px;}
+.matieres button{padding:8px 14px;border:1px solid #1e88e5;background:white;color:#1e88e5;border-radius:20px;}
+.matieres button.active{background:#1e88e5;color:white;}
+.chat{background:white;margin:10px;border-radius:15px;padding:15px;min-height:180px;}
+.msg{background:#e3f2fd;padding:12px;border-radius:12px;margin-bottom:10px;}
+.user-msg{background:#d1ffd1;text-align:right;}
+.zone{padding:10px 15px 20px;}
+textarea{width:100%;height:150px;padding:15px;font-size:16px;border:2px solid #1e88e5;border-radius:15px;box-sizing:border-box;resize:none;}
+.btn{width:100%;padding:15px;background:#1e88e5;color:white;border:none;border-radius:12px;font-size:18px;margin-top:10px;}
+.btn2{width:48%;padding:10px;border-radius:10px;border:1px solid #ccc;background:white;margin-top:10px;}
+.flex{display:flex;justify-content:space-between;}
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>AI GUSTAVE - ÉCOLE</h1>
+<p>Écris ta question, je t'aide vite !</p>
+</div>
+
+<div class="matieres">
+<button class="active" onclick="choisir(this,'Maths')">Maths</button>
+<button onclick="choisir(this,'Français')">Français</button>
+<button onclick="choisir(this,'Anglais')">Anglais</button>
+<button onclick="choisir(this,'Histoire')">Histoire</button>
+<button onclick="choisir(this,'Géographie')">Géographie</button>
+<button onclick="choisir(this,'Sciences')">Sciences</button>
+<button onclick="choisir(this,'Informatique')">Informatique</button>
+</div>
+
+<div class="chat" id="chat">
+<div class="msg">Salut ! Je suis <b>AI GUSTAVE ÉCOLE</b>.<br>Écris ta question en bas, je te réponds rapidement.</div>
+</div>
+
+<div class="zone">
+<textarea id="question" placeholder="Écris ta question ici... Ex: C'est quoi 5 + 5 ?"></textarea>
+<button class="btn" onclick="envoyer()">Envoyer ➤</button>
+<div class="flex">
+<button class="btn2" onclick="partager()">Partager sur WhatsApp</button>
+<button class="btn2" onclick="copier()">Copier</button>
+</div>
+</div>
+
+<script>
+let matiere = "Maths";
+
+function choisir(btn, m){
+  matiere = m;
+  document.querySelectorAll('.matieres button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function envoyer(){
+  let q = document.getElementById("question").value.trim();
+  if(q==""){ alert("Écris d'abord ta question"); return; }
+
+  let chat = document.getElementById("chat");
+  chat.innerHTML += '<div class="msg user-msg">'+ q +'</div>';
+  document.getElementById("question").value = "";
+
+  let reponse = repondre(q);
+  setTimeout(()=>{
+    chat.innerHTML += '<div class="msg"><b>AI GUSTAVE :</b><br>'+ reponse +'</div>';
+    chat.scrollTop = chat.scrollHeight;
+  }, 400);
+}
+
+function repondre(q){
+  q = q.toLowerCase();
+
+  if(q.includes("bonjour") || q.includes("salut")) return "Bonjour ! Je suis là. Pose-moi ta question de "+ matiere +".";
+  if(q.includes("5 + 5") || q.includes("5+5")) return "5 + 5 = 10";
+  if(q.includes("2 + 2") || q.includes("2+2")) return "2 + 2 = 4";
+  if(q.includes("addition") || q.includes("+")) return "Pour l'addition, tu additionnes les nombres. Exemple : 3 + 4 = 7. Donne-moi ton calcul, je le fais pour toi.";
+  if(q.includes("soustraction") || q.includes("-")) return "Pour la soustraction, tu enlèves le petit nombre du grand nombre. Exemple : 10 - 4 = 6.";
+  if(q.includes("multiplication") || q.includes("x") || q.includes("*")) return "Pour la multiplication, tu multiplies. Exemple : 3 x 4 = 12.";
+  if(q.includes("division") || q.includes("/")) return "Pour la division, tu partages. Exemple : 12 / 3 = 4.";
+  if(q.includes("français") || q.includes("verbe")) return "En Français, dis-moi le verbe ou la phrase, je t'explique simplement.";
+  if(q.includes("anglais")) return "En Anglais, écris le mot ou la phrase à traduire, je t'aide.";
+  if(q.includes("histoire")) return "En Histoire, dis-moi le sujet, je t'explique avec des dates simples.";
+  if(q.includes("géographie") || q.includes("geographie")) return "En Géographie, dis-moi le pays ou le sujet, je t'explique.";
+  if(q.includes("science")) return "En Sciences, pose ta
