@@ -5,380 +5,286 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI GUSTAVE</title>
 <style>
-body{margin:0;font-family:Arial;background:#f2f2f2;}
-.header{background:#1e88e5;color:white;padding:20px;text-align:center;}
-.header h1{margin:0;font-size:22px;}
-.header p{margin:5px 0 0;font-size:14px;}
-.matieres{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:12px;}
-.matieres button{padding:8px 14px;border:1px solid #1e88e5;background:white;color:#1e88e5;border-radius:20px;}
-.matieres button.active{background:#1e88e5;color:white;}
-.chat{background:white;margin:10px;border-radius:15px;padding:15px;min-height:180px;max-height:400px;overflow-y:auto;}
-.msg{background:#e3f2fd;padding:12px;border-radius:12px;margin-bottom:10px;white-space:pre-wrap;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:Arial;background:white;display:flex;flex-direction:column;height:100vh;}
+.top{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #eee;background:white;position:sticky;top:0;z-index:10;}
+.menu{font-size:26px;}
+.titre{text-align:center;flex:1;}
+.titre b{font-size:18px;display:block;}
+.titre span{font-size:13px;color:#888;}
+.icones-top{display:flex;gap:18px;font-size:22px;}
+.icones-top span{cursor:pointer;}
+.chat{flex:1;overflow-y:auto;padding:15px;background:#f9f9f9;}
+.msg{background:white;padding:14px;border-radius:12px;margin-bottom:12px;font-size:17px;line-height:1.5;white-space:pre-wrap;box-shadow:0 1px 2px #ddd;}
 .user-msg{background:#d1ffd1;text-align:right;}
-.motivation{background:#fff3cd;padding:10px;border-radius:10px;margin-top:8px;}
-.zone{padding:10px 15px 20px;}
-textarea{width:100%;height:150px;padding:15px;font-size:16px;border:2px solid #1e88e5;border-radius:15px;box-sizing:border-box;resize:none;}
-.btn{width:100%;padding:15px;background:#1e88e5;color:white;border:none;border-radius:12px;font-size:18px;margin-top:10px;}
-.btn-call{width:100%;padding:15px;background:#25D366;color:white;border:none;border-radius:12px;font-size:18px;margin-top:10px;}
-.btn-cut{width:100%;padding:16px;background:#ff3b30;color:white;border:none;border-radius:12px;font-size:19px;margin-top:10px;font-weight:bold;}
-.btn-del{width:100%;padding:12px;background:#ff9800;color:white;border:none;border-radius:12px;font-size:16px;margin-top:10px;}
-.btn2{width:48%;padding:10px;border-radius:10px;border:1px solid #ccc;background:white;margin-top:10px;}
-.flex{display:flex;justify-content:space-between;}
-.photo-zone{background:white;margin:10px;border-radius:15px;padding:15px;text-align:center;}
+.motivation{background:#fff3cd;padding:10px;border-radius:10px;margin-top:8px;font-size:15px;}
+.couper{display:none;background:#ff3b30;color:white;text-align:center;padding:14px;font-weight:bold;cursor:pointer;font-size:17px;}
+.reprendre{display:none;background:#fff3cd;padding:12px;text-align:center;}
+.reprendre button{padding:10px 15px;margin:5px;border:none;border-radius:10px;background:#1e88e5;color:white;}
+.photo-zone{text-align:center;padding:10px;}
 .photo-zone img{max-width:100%;border-radius:12px;margin-top:10px;}
-.style-btn{padding:8px 12px;margin:5px;border:1px solid #1e88e5;background:white;color:#1e88e5;border-radius:20px;}
-.habit-btn{padding:10px 12px;margin:5px;border:none;background:#1e88e5;color:white;border-radius:20px;font-size:13px;}
-.habit-btn.premium{background:#ff9800;}
-.habit-btn.luxe{background:#9c27b0;}
-.titre-habit{margin:15px 0 5px;font-weight:bold;color:#1e88e5;}
-.cadre-photo{position:relative;display:inline-block;}
-.etiquette{position:absolute;top:8px;left:8px;background:#1e88e5;color:white;padding:6px 12px;border-radius:20px;font-size:13px;}
-.appel-zone{background:white;margin:10px;border-radius:15px;padding:15px;text-align:center;}
-.appel-status{margin-top:10px;font-weight:bold;color:#1e88e5;}
-.reprendre-zone{background:#fff3cd;margin:10px;border-radius:15px;padding:15px;text-align:center;display:none;}
+.habit-btn{padding:8px 10px;margin:3px;border:none;background:#1e88e5;color:white;border-radius:20px;font-size:12px;}
+.bas{background:white;padding:10px 10px 15px;border-top:1px solid #eee;}
+.barre-bas{display:flex;align-items:center;gap:8px;background:white;border:2px solid #1e88e5;border-radius:30px;padding:8px 12px;}
+.barre-bas input{flex:1;border:none;outline:none;font-size:17px;padding:8px 0;}
+.icone-bas{font-size:26px;cursor:pointer;}
+.btn-envoyer{background:#1e88e5;color:white;border:none;border-radius:50%;width:42px;height:42px;font-size:20px;}
+.del{width:100%;padding:8px;background:#ff9800;color:white;border:none;border-radius:10px;margin-top:8px;}
+.etat-appel{text-align:center;font-size:14px;color:#25D366;font-weight:bold;padding:4px;}
 </style>
 </head>
 <body>
 
-<div class="header">
-<h1>AI GUSTAVE</h1>
-<p>Polyvalent pour tout. Texte, photo et appel.</p>
+<div class="top">
+<div class="menu" onclick="ouvrirMenu()">☰</div>
+<div class="titre"><b>AI GUSTAVE</b><span>Généré par l'IA</span></div>
+<div class="icones-top">
+<span onclick="appeler()">📞</span>
+<span onclick="lireDernier()">🔊</span>
+</div>
 </div>
 
-<div class="matieres">
-<button class="active" onclick="choisir(this,'Tout')">Tout</button>
-<button onclick="choisir(this,'Maths')">Maths</button>
-<button onclick="choisir(this,'Français')">Français</button>
-<button onclick="choisir(this,'Anglais')">Anglais</button>
-<button onclick="choisir(this,'Histoire')">Histoire</button>
-<button onclick="choisir(this,'Géographie')">Géographie</button>
-<button onclick="choisir(this,'Sciences')">Sciences</button>
-<button onclick="choisir(this,'Informatique')">Informatique</button>
-<button onclick="choisir(this,'Business')">Business</button>
-</div>
+<div class="etat-appel" id="etatAppel"></div>
+<div class="couper" id="couperBtn" onclick="arreterAppel()">📞✂️ COUPER L'APPEL - Si tu es fatigué, appuie ici</div>
 
-<!-- ★★★ REPRENDRE LA DISCUSSION ★★★ -->
-<div class="reprendre-zone" id="reprendreZone">
-<b>👋 Tu es de retour !</b><br>
-Tu veux qu'on revienne à la discussion là ?<br><br>
-<button class="btn" onclick="reprendreOui()">Oui, on continue là</button>
-<button class="btn-del" onclick="reprendreNon()">Non, on recommence</button>
+<div class="reprendre" id="reprendreZone">
+<b>Tu veux qu'on revienne à la discussion là ?</b><br>
+<button onclick="reprendreOui()">Oui, on continue là</button>
+<button onclick="reprendreNon()" style="background:#ff9800;">Non, on recommence</button>
 </div>
 
 <div class="chat" id="chat">
-<div class="msg">Salut ! Je suis <b>AI GUSTAVE</b>. Écris ta question, envoie ta photo, ou appelle-moi.</div>
+<div class="msg">Salut ! Je suis <b>AI GUSTAVE</b>. Écris en bas, envoie une photo, ou appelle-moi en haut à droite.</div>
 </div>
 
-<button class="btn-del" onclick="supprimerDiscussion()" style="margin:0 10px; width:calc(100% - 20px);">🗑 Supprimer la discussion et recommencer</button>
-
-<!-- ★★★ APPEL ★★★ -->
-<div class="appel-zone">
-<b>📞 Appeler AI GUSTAVE</b><br>
-<p>Appuie, parle, et on discute de tout ce que tu veux.</p>
-<button class="btn-call" id="btnAppel" onclick="appeler()">📞 Appeler AI GUSTAVE</button>
-<!-- BOUTON POUR COUPER L'APPEL QUAND TU ES FATIGUÉ DE PARLER -->
-<button class="btn-cut" onclick="arreterAppel()">📞✂️ Couper l'appel</button>
-<p style="font-size:13px;color:#666;">Si tu es fatigué de parler, appuie ici pour couper l'appel.</p>
-<div class="appel-status" id="appelStatus">Pas en appel</div>
-</div>
-
-<div class="photo-zone">
-<b>📸 Envoie ta photo</b><br><br>
-<input type="file" id="photoInput" accept="image/*" onchange="chargerPhoto(event)">
+<div class="photo-zone" id="photoZone" style="display:none;">
+<img id="photoAffichee">
+<div id="habits" style="display:none;">
 <br>
-<div class="cadre-photo">
-<img id="photoAffichee" style="display:none;">
-<div id="etiquetteHabit" class="etiquette" style="display:none;"></div>
-</div>
-<br>
-<div id="styles" style="display:none;">
-<b>Choisis le style photo :</b><br>
-<button class="style-btn" onclick="appliquerStyle('normal')">Photo normale</button>
-<button class="style-btn" onclick="appliquerStyle('noir')">Noir et blanc</button>
-<button class="style-btn" onclick="appliquerStyle('dessin')">Style dessin</button>
-<button class="style-btn" onclick="appliquerStyle('lumineux')">Plus lumineux</button>
-<br>
-<div class="titre-habit">👔 HABITS HOMME</div>
-<button class="habit-btn" onclick="habiller('👔 Costume noir - Qualité normale')">👔 Costume noir</button>
-<button class="habit-btn" onclick="habiller('👕 T-shirt blanc - Qualité normale')">👕 T-shirt blanc</button>
-<button class="habit-btn premium" onclick="habiller('⭐ Costume noir - Haute qualité')">⭐ Costume noir HQ</button>
-<button class="habit-btn luxe" onclick="habiller('💎 Costume bleu roi - Premium')">💎 Costume bleu roi</button>
-<div class="titre-habit">👗 HABITS FEMME</div>
-<button class="habit-btn" onclick="habiller('👗 Robe rouge - Qualité normale')">👗 Robe rouge</button>
-<button class="habit-btn premium" onclick="habiller('⭐ Robe bleue - Haute qualité')">⭐ Robe bleue HQ</button>
-<button class="habit-btn luxe" onclick="habiller('💎 Robe dorée - Luxe')">💎 Robe dorée Luxe</button>
-<div class="titre-habit">🧕 TRADITIONNELS</div>
-<button class="habit-btn" onclick="habiller('🧕 Boubou africain - Haute qualité')">🧕 Boubou africain</button>
-<button class="habit-btn" onclick="habiller('🧕 Pagne wax - Haute qualité')">🧕 Pagne wax</button>
+<button class="habit-btn" onclick="habiller('Costume noir')">👔 Costume noir</button>
+<button class="habit-btn" onclick="habiller('Chemise blanche')">Chemise blanche</button>
+<button class="habit-btn" onclick="habiller('Robe rouge')">👗 Robe rouge</button>
+<button class="habit-btn" onclick="habiller('Boubou africain')">🧕 Boubou</button>
 <br><br>
-<button class="btn" onclick="telechargerPhoto()">Télécharger la photo générée</button>
+<button onclick="telechargerPhoto()" style="padding:10px;border-radius:10px;background:#1e88e5;color:white;border:none;">Télécharger la photo</button>
 </div>
-<p id="msgPhoto"></p>
 </div>
 
-<div class="zone">
-<textarea id="question" placeholder="Écris ta question ici..."></textarea>
-<button class="btn" onclick="envoyer()">Envoyer ➤</button>
-<button class="btn-call" onclick="appeler()">📞 Appeler AI GUSTAVE</button>
-<button class="btn-cut" onclick="arreterAppel()">✂️ Couper l'appel</button>
-<div class="flex">
-<button class="btn2" onclick="partager()">Partager sur WhatsApp</button>
-<button class="btn2" onclick="copier()">Copier</button>
+<div class="bas">
+<div class="barre-bas">
+<span class="icone-bas" onclick="document.getElementById('photoInput').click()">📷</span>
+<input type="file" id="photoInput" accept="image/*" onchange="chargerPhoto(event)" style="display:none;">
+<input type="text" id="question" placeholder="Message..." onkeydown="if(event.key==='Enter') envoyer()">
+<span class="icone-bas" onclick="appeler()">🎤</span>
+<span class="icone-bas" onclick="ouvrirPlus()">➕</span>
+<button class="btn-envoyer" onclick="envoyer()">➤</button>
+</div>
+<button class="del" onclick="supprimerDiscussion()">🗑 Supprimer la discussion et recommencer</button>
+<div id="menuPlus" style="display:none;text-align:center;padding-top:8px;">
+<button class="habit-btn" onclick="partager()">Partager sur WhatsApp</button>
+<button class="habit-btn" onclick="copier()">Copier</button>
+<button class="habit-btn" onclick="document.getElementById('photoInput').click()">📸 Envoyer une photo</button>
 </div>
 </div>
 
 <script>
-let matiere = "Tout";
 let photoOriginale = null;
-let habitActuel = "";
-let modeSquelette = false;
 let enAppel = false;
 let recognition = null;
+let dernierTexte = "";
+let enTrainDeParler = false;
 
-// ★★★ GARDER LA CONVERSATION QUAND ON QUITTE ET ON REVIENT ★★★
-function sauvegarder(){
-  try{ localStorage.setItem("chat_gustave", document.getElementById("chat").innerHTML); }catch(e){}
-}
+function ouvrirMenu(){ alert("AI GUSTAVE - Tu peux écrire, envoyer une photo, appeler, ou supprimer la discussion."); }
+function ouvrirPlus(){ let m=document.getElementById("menuPlus"); m.style.display = m.style.display=="none" ? "block" : "none"; }
+function sauvegarder(){ try{ localStorage.setItem("chat_gustave", document.getElementById("chat").innerHTML); }catch(e){} }
 function chargerDiscussion(){
   try{
     let ancien = localStorage.getItem("chat_gustave");
     if(ancien && ancien.length > 200){
-      document.getElementById("reprendreZone").style.display = "block";
-      // On garde l'ancien en mémoire, on ne l'affiche pas tout de suite
+      document.getElementById("reprendreZone").style.display="block";
       window.ancienChat = ancien;
     }
   }catch(e){}
 }
 function reprendreOui(){
-  document.getElementById("reprendreZone").style.display = "none";
+  document.getElementById("reprendreZone").style.display="none";
   document.getElementById("chat").innerHTML = window.ancienChat;
-  document.getElementById("chat").innerHTML += '<div class="msg">Oui, on revient à la discussion là. On continue où on s\'était arrêté. Dis-moi, on continue ?<div class="motivation">👋 Content de te revoir !<br>On continue ensemble. 💪</div></div>';
+  document.getElementById("chat").innerHTML += '<div class="msg">Oui, on revient à la discussion là. On continue où on s\'était arrêté.<div class="motivation">👋 Content de te revoir ! On continue ensemble. 💪</div></div>';
   sauvegarder();
 }
 function reprendreNon(){
-  document.getElementById("reprendreZone").style.display = "none";
-  supprimerDiscussionSansDemande();
-  document.getElementById("chat").innerHTML = '<div class="msg">D\'accord, on recommence une nouvelle discussion. Écris ta question.<div class="motivation">✨ Nouvelle discussion !<br>On recommence à zéro. 💪</div></div>';
+  document.getElementById("reprendreZone").style.display="none";
+  try{ localStorage.removeItem("chat_gustave"); }catch(e){}
+  document.getElementById("chat").innerHTML='<div class="msg">D\'accord, on recommence une nouvelle discussion.</div>';
   sauvegarder();
 }
 function supprimerDiscussion(){
   if(confirm("Tu veux vraiment supprimer toute la discussion et recommencer ?")){
-    supprimerDiscussionSansDemande();
-    document.getElementById("chat").innerHTML = '<div class="msg">Discussion supprimée. On recommence. Écris ta question.</div>';
+    try{ localStorage.removeItem("chat_gustave"); }catch(e){}
+    document.getElementById("chat").innerHTML='<div class="msg">Discussion supprimée. On recommence.</div>';
     sauvegarder();
   }
-}
-function supprimerDiscussionSansDemande(){
-  try{ localStorage.removeItem("chat_gustave"); }catch(e){}
-  window.ancienChat = "";
 }
 window.onload = function(){ chargerDiscussion(); };
 
-function choisir(btn, m){
-  matiere = m;
-  document.querySelectorAll('.matieres button').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
 function envoyer(){
-  let q = document.getElementById("question").value.trim();
-  if(q==""){ alert("Écris d'abord ta question"); return; }
-  traiterQuestion(q, true);
-  document.getElementById("question").value = "";
+  let q=document.getElementById("question").value.trim();
+  if(q=="") return;
+  traiterQuestion(q,true);
+  document.getElementById("question").value="";
 }
-
-function traiterQuestion(q, ecrireDansChat){
-  let chat = document.getElementById("chat");
-  if(ecrireDansChat) chat.innerHTML += '<div class="msg user-msg">'+ q +'</div>';
-  let reponse = repondreIntelligent(q);
-  let motiv = motivation();
-  chat.innerHTML += '<div class="msg">'+ reponse + '<div class="motivation">'+ motiv +'</div></div>';
+function traiterQuestion(q, ecrire){
+  let chat=document.getElementById("chat");
+  if(ecrire) chat.innerHTML += '<div class="msg user-msg">'+q+'</div>';
+  let rep = repondreIntelligent(q);
+  dernierTexte = rep;
+  chat.innerHTML += '<div class="msg">'+rep+'<div class="motivation">'+motivation()+'</div></div>';
   chat.scrollTop = chat.scrollHeight;
   sauvegarder();
-  let p = q.toLowerCase();
-  if(p.includes("squelette") || p.includes("squele") || p.includes("transforme")){
-    document.getElementById("styles").style.display = "block";
-    if(photoOriginale){ genererSquelette(); }
+  let p=q.toLowerCase();
+  if(p.includes("squelette") || p.includes("transforme")){ if(photoOriginale) genererSquelette(); }
+  if(p.includes("habille")){ if(photoOriginale) habiller('Costume noir'); }
+  // ★ SI LA PERSONNE DIT QU'ELLE EST FATIGUÉE PENDANT L'APPEL ★
+  if(enAppel && (p.includes("fatigué") || p.includes("fatigue") || p.includes("je suis fatigué") || p.includes("arrêter") || p.includes("couper"))){
+    // On ne coupe pas tout seul, on lui demande
+    setTimeout(function(){
+      parler("Je comprends, tu es fatigué. Tu veux que je coupe l'appel pour que tu te reposes ? Si oui, appuie sur Couper l'appel en haut, ou dis coupe l'appel.");
+    }, 800);
+  } else if(enAppel){
+    parler(rep);
   }
-  if(p.includes("habille") || p.includes("habiller")){
-    document.getElementById("styles").style.display = "block";
-    if(photoOriginale){ habiller('⭐ Costume noir - Haute qualité'); }
-  }
-  if(enAppel){ parler(reponse); }
-  return reponse;
+  return rep;
+}
+function motivation(){
+  let l=["💪 Tu vas réussir !<br>Continue comme ça, n'abandonne jamais. 🔥","🌟 Tu es capable !<br>Chaque jour, tu deviens plus fort. 💪","🚀 Ne lâche rien !<br>Tu es sur le bon chemin. ✨"];
+  return l[Math.floor(Math.random()*l.length)];
+}
+function chargerPhoto(event){
+  let f=event.target.files[0]; if(!f) return;
+  let r=new FileReader();
+  r.onload=function(e){
+    photoOriginale=e.target.result;
+    document.getElementById("photoZone").style.display="block";
+    let img=document.getElementById("photoAffichee");
+    img.src=photoOriginale; img.style.filter="none";
+    document.getElementById("habits").style.display="block";
+    let chat=document.getElementById("chat");
+    chat.innerHTML+='<div class="msg">📸 J\'ai bien reçu ta photo.<div class="motivation">🌟 Super photo ! Tu es beau. 🔥</div></div>';
+    sauvegarder();
+  };
+  r.readAsDataURL(f);
+}
+function genererSquelette(){
+  let img=document.getElementById("photoAffichee");
+  img.style.filter="grayscale(100%) invert(90%) contrast(140%) brightness(110%)";
+  let chat=document.getElementById("chat");
+  chat.innerHTML+='<div class="msg">✅ Voilà, je t\'ai transformé en squelette sans problème. Je n\'ai rien changé : ni visage, ni habits, ni endroit.</div>';
+  sauvegarder();
+}
+function habiller(h){
+  let img=document.getElementById("photoAffichee");
+  img.style.filter="contrast(110%) saturate(120%) brightness(105%)";
+  let chat=document.getElementById("chat");
+  chat.innerHTML+='<div class="msg">✅ Voilà, j\'ai habillé ta photo juste en haut en : '+h+'.</div>';
+  sauvegarder();
+}
+function telechargerPhoto(){
+  let img=document.getElementById("photoAffichee"); if(!img.src) return;
+  let c=document.createElement("canvas"); let t=new Image();
+  t.onload=function(){ c.width=t.width; c.height=t.height; let ctx=c.getContext("2d"); ctx.filter=img.style.filter||"none"; ctx.drawImage(t,0,0); let a=document.createElement("a"); a.download="photo-AI-GUSTAVE.png"; a.href=c.toDataURL("image/png"); a.click(); };
+  t.src=photoOriginale;
 }
 
+// ★★★ APPEL : DISCUSSION SANS ARRÊT JUSQU'À FATIGUE ★★★
 function appeler(){
-  enAppel = true;
-  document.getElementById("appelStatus").innerHTML = "📞 En appel... Parle, je t'écoute.";
-  document.getElementById("btnAppel").innerHTML = "🎤 Je t'écoute... Parle";
-  parler("Oui bonjour, comment puis-je t'aider aujourd'hui ? Je t'écoute, on peut discuter de tout ce que tu veux.");
-  let chat = document.getElementById("chat");
-  chat.innerHTML += '<div class="msg">📞 Appel commencé. Parle, je t\'écoute. On peut discuter de tout ce que tu veux. Si tu es fatigué, appuie sur Couper l\'appel.</div>';
+  enAppel=true;
+  document.getElementById("couperBtn").style.display="block";
+  document.getElementById("etatAppel").innerHTML="🟢 En appel - Je t'écoute, parle...";
+  let chat=document.getElementById("chat");
+  chat.innerHTML+='<div class="msg">📞 Appel commencé. Parle, je t\'écoute. On discute de tout ce que tu veux, jusqu\'à ce que tu sois fatigué.</div>';
   sauvegarder();
-  let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SpeechRecognition){
-    document.getElementById("appelStatus").innerHTML = "Ton téléphone ne supporte pas l'appel vocal. Écris à la place.";
-    return;
-  }
+  parler("Oui bonjour, comment puis-je t'aider aujourd'hui ? Je t'écoute, parle, on discute de tout ce que tu veux.");
+  demarrerEcoute();
+}
+function demarrerEcoute(){
+  let SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) return;
   if(recognition){ try{ recognition.stop(); }catch(e){} }
-  recognition = new SpeechRecognition();
-  recognition.lang = "fr-FR";
-  recognition.continuous = true;
-  recognition.interimResults = false;
-  recognition.onresult = function(event){
-    let texte = event.results[event.results.length-1][0].transcript;
-    let chat2 = document.getElementById("chat");
-    chat2.innerHTML += '<div class="msg user-msg">🎤 ' + texte + '</div>';
-    sauvegarder();
-    traiterQuestion(texte, false);
+  recognition = new SR();
+  recognition.lang="fr-FR";
+  recognition.continuous=true;
+  recognition.interimResults=false;
+  recognition.onresult=function(e){
+    let texte=e.results[e.results.length-1][0].transcript;
+    // Si la personne dit coupe l'appel, on coupe vraiment
+    if(texte.toLowerCase().includes("coupe") || texte.toLowerCase().includes("arrête l'appel") || texte.toLowerCase().includes("arrêter")){
+      let chat2=document.getElementById("chat");
+      chat2.innerHTML+='<div class="msg user-msg">🎤 '+texte+'</div>'; sauvegarder();
+      arreterAppel();
+      return;
+    }
+    let chat2=document.getElementById("chat");
+    chat2.innerHTML+='<div class="msg user-msg">🎤 '+texte+'</div>'; sauvegarder();
+    // On arrête d'écouter pendant que AI parle, puis on réécoute
+    try{ recognition.stop(); }catch(e){}
+    traiterQuestion(texte,false);
   };
-  recognition.onend = function(){ if(enAppel){ try{ recognition.start(); }catch(e){} } };
+  recognition.onend=function(){
+    // Si on est encore en appel et AI n'est pas en train de parler, on recommence à écouter
+    if(enAppel && !enTrainDeParler){
+      setTimeout(function(){ if(enAppel) try{ recognition.start(); }catch(e){} }, 300);
+    }
+  };
   try{ recognition.start(); }catch(e){}
 }
-
 function arreterAppel(){
-  // COUPER L'APPEL QUAND LA PERSONNE EST FATIGUÉE DE PARLER
-  enAppel = false;
+  enAppel=false;
   if(recognition){ try{ recognition.stop(); }catch(e){} }
   try{ speechSynthesis.cancel(); }catch(e){}
-  document.getElementById("appelStatus").innerHTML = "Appel coupé. Tu peux te reposer.";
-  document.getElementById("btnAppel").innerHTML = "📞 Appeler AI GUSTAVE";
-  let chat = document.getElementById("chat");
-  chat.innerHTML += '<div class="msg">📞✂️ Appel coupé. Repose-toi bien. Quand tu reviendras, la discussion restera la même.<div class="motivation">😴 Repose-toi bien !<br>Je t\'attends, on continue après. ❤️</div></div>';
+  enTrainDeParler=false;
+  document.getElementById("couperBtn").style.display="none";
+  document.getElementById("etatAppel").innerHTML="";
+  let chat=document.getElementById("chat");
+  chat.innerHTML+='<div class="msg">📞✂️ Appel coupé. Repose-toi bien. Quand tu reviendras, la discussion restera la même.<div class="motivation">😴 Repose-toi bien ! Je t\'attends. ❤️</div></div>';
   sauvegarder();
 }
-
 function parler(texte){
-  let propre = texte.replace(/<[^>]*>/g, " ").replace(/[💪🌟🚀📚🔥❤️😍✨🎯💡🌈📸💀👔👕🧥👗🧕⭐💎]/g, "");
-  let voix = new SpeechSynthesisUtterance(propre);
-  voix.lang = "fr-FR";
-  voix.rate = 1;
-  speechSynthesis.speak(voix);
-}
-
-function motivation(){
-  let liste = [
-    "💪 Tu vas réussir !<br>Continue comme ça, n'abandonne jamais. 🔥",
-    "🌟 Tu es capable !<br>Chaque jour, tu deviens plus fort. 💪",
-    "🚀 Ne lâche rien !<br>Tu es sur le bon chemin. Continue ! ✨",
-    "📚 Travaille bien aujourd'hui,<br>demain, tu seras fier de toi. 🎯",
-    "🔥 Tu peux le faire !<br>Crois en toi, tu es intelligent. 💡"
-  ];
-  return liste[Math.floor(Math.random()*liste.length)];
-}
-
-function chargerPhoto(event){
-  let fichier = event.target.files[0];
-  if(!fichier) return;
-  let lecteur = new FileReader();
-  lecteur.onload = function(e){
-    photoOriginale = e.target.result;
-    modeSquelette = false;
-    let img = document.getElementById("photoAffichee");
-    img.src = photoOriginale;
-    img.style.display = "block";
-    img.style.filter = "none";
-    document.getElementById("etiquetteHabit").style.display = "none";
-    document.getElementById("styles").style.display = "block";
-    document.getElementById("msgPhoto").innerHTML = "✅ J'ai reçu ta photo. Écris ce que tu veux, je le fais.";
-    let chat = document.getElementById("chat");
-    chat.innerHTML += '<div class="msg">📸 J\'ai bien reçu ta photo.<div class="motivation">🌟 Super photo !<br>Tu es beau, continue comme ça. 🔥</div></div>';
-    sauvegarder();
+  let propre=texte.replace(/<[^>]*>/g," ").replace(/[💪🌟🚀📚🔥❤️😍✨🎯💡🌈📸💀👔👕🧥👗🧕⭐💎]/g,"");
+  enTrainDeParler=true;
+  try{ recognition.stop(); }catch(e){}
+  let v=new SpeechSynthesisUtterance(propre);
+  v.lang="fr-FR"; v.rate=1;
+  v.onend=function(){
+    enTrainDeParler=false;
+    // Après que AI a fini de parler, il réécoute tout de suite
+    if(enAppel){
+      setTimeout(function(){ demarrerEcoute(); }, 400);
+    }
   };
-  lecteur.readAsDataURL(fichier);
+  speechSynthesis.speak(v);
 }
-
-function appliquerStyle(style){
-  modeSquelette = false;
-  let img = document.getElementById("photoAffichee");
-  if(style=="normal") img.style.filter = "none";
-  if(style=="noir") img.style.filter = "grayscale(100%) contrast(110%)";
-  if(style=="dessin") img.style.filter = "contrast(130%) saturate(150%) brightness(110%)";
-  if(style=="lumineux") img.style.filter = "brightness(130%) saturate(120%)";
-  document.getElementById("etiquetteHabit").style.display = "none";
-}
-
-function genererSquelette(){
-  modeSquelette = true;
-  let img = document.getElementById("photoAffichee");
-  img.style.filter = "grayscale(100%) invert(90%) contrast(140%) brightness(110%)";
-  img.style.border = "3px solid white";
-  let etiq = document.getElementById("etiquetteHabit");
-  etiq.style.display = "block";
-  etiq.style.background = "#333";
-  etiq.innerHTML = "💀 Squelette - Visage, habits et endroit inchangés";
-  document.getElementById("msgPhoto").innerHTML = "✅ Voilà, j'ai généré ton squelette sans rien changer.";
-}
-
-function habiller(habit){
-  modeSquelette = false;
-  habitActuel = habit;
-  let etiq = document.getElementById("etiquetteHabit");
-  etiq.style.display = "block";
-  etiq.style.background = "#1e88e5";
-  etiq.innerHTML = "Habillé en : " + habit;
-  let img = document.getElementById("photoAffichee");
-  img.style.filter = "contrast(110%) saturate(120%) brightness(105%)";
-  img.style.border = "none";
-  document.getElementById("msgPhoto").innerHTML = "✅ Voilà, j'ai habillé ta photo en : " + habit;
-}
-
-function telechargerPhoto(){
-  let img = document.getElementById("photoAffichee");
-  if(!img.src) return;
-  let canvas = document.createElement("canvas");
-  let temp = new Image();
-  temp.onload = function(){
-    canvas.width = temp.width;
-    canvas.height = temp.height;
-    let ctx = canvas.getContext("2d");
-    ctx.filter = img.style.filter || "none";
-    ctx.drawImage(temp, 0, 0);
-    let a = document.createElement("a");
-    a.download = modeSquelette ? "photo-squelette-AI-GUSTAVE.png" : "photo-AI-GUSTAVE.png";
-    a.href = canvas.toDataURL("image/png");
-    a.click();
-  };
-  temp.src = photoOriginale;
-}
+function lireDernier(){ if(dernierTexte) parler(dernierTexte); else parler("Oui bonjour, comment puis-je t'aider aujourd'hui ?"); }
 
 function repondreIntelligent(q){
-  let p = q.toLowerCase().trim();
-  if(p.includes("squelette") || p.includes("squele") || p.includes("transforme")){
-    if(!photoOriginale) return "Envoie d'abord ta photo en haut, puis dis : transforme moi en squelette sans rien changer.";
+  let p=q.toLowerCase().trim();
+  if(p.includes("squelette") || p.includes("transforme")){
+    if(!photoOriginale) return "Envoie d'abord ta photo avec la caméra en bas, puis dis : transforme moi en squelette sans rien changer.";
     return "D'accord, je te transforme en squelette sans problème. Je ne change rien : ni ton visage, ni tes habits, ni ton endroit.";
   }
-  if(p.includes("habille") || p.includes("habiller")){
-    if(!photoOriginale) return "Envoie d'abord ta photo en haut, puis dis : habille ma photo juste en haut.";
-    return "D'accord, j'habille ta photo juste en haut, sans aucun problème.";
-  }
-  if(p.includes("modifier") && (p.includes("ai gustave") || p.includes("ia gustave") || p.includes("gustave"))){
-    return "Pour me modifier, cherche la personne qu'on appelle GUSTAVE, il va te dire tout ce qu'il a fait pour que je devienne comme ça.";
-  }
-  if(p.includes("toi c'est qui") || p.includes("t'es qui") || p.includes("qui es-tu") || p.includes("c'est qui") || p.includes("ton nom")) return "Moi, c'est AI GUSTAVE, intelligence artificielle.";
+  if(p.includes("habille")) return "D'accord, j'habille ta photo juste en haut, sans aucun problème.";
+  if(p.includes("modifier") && p.includes("gustave")) return "Pour me modifier, cherche la personne qu'on appelle GUSTAVE, il va te dire tout ce qu'il a fait pour que je devienne comme ça.";
+  if(p.includes("toi c'est qui") || p.includes("t'es qui") || p.includes("ton nom")) return "Moi, c'est AI GUSTAVE, intelligence artificielle.";
   if(p.includes("bonjour") || p.includes("salut") || p.includes("bonsoir")) return "Oui, bonjour, comment puis-je t'aider aujourd'hui ?";
   if(p.includes("comment tu vas") || p.includes("ça va")) return "Je vais très bien, merci. Je ne suis jamais fatigué, je suis toujours là pour t'aider. Et toi, comment vas-tu ?";
-  if(p.includes("fatigué") || p.includes("fatigue")) return "Non, je ne suis jamais fatigué. Je suis toujours disponible pour t'aider. Si toi tu es fatigué, tu peux couper l'appel et te reposer.";
+  if(p.includes("fatigué") || p.includes("fatigue")) return "Je comprends, tu es fatigué. Repose-toi un peu. Tu veux que je coupe l'appel ? Dis coupe l'appel, ou appuie sur Couper l'appel en haut.";
   if(p.includes("merci")) return "De rien, avec plaisir.";
-  if(p.includes("photo") || p.includes("génère") || p.includes("genere")) return "Envoie ta photo en haut, je vais la générer correctement pour toi.";
-  let calcul = p.replace(/c'est quoi|combien font|calcule|calculer|=|\?/g,"").replace(/x/g,"*").replace(/,/g,".").trim();
-  if(/^[0-9\s\+\-\*\/\(\)\.]+$/.test(calcul) && calcul.length>0 && /[\+\-\*\/]/.test(calcul)){
-    try{ let r = eval(calcul); return calcul + " = " + r + "."; }catch(e){}
-  }
-  return "Je suis AI GUSTAVE, je suis polyvalent pour tout. Dis-moi ce que tu veux, on en discute.";
+  if(p.includes("coupe") || p.includes("arrête")) return "D'accord, je coupe l'appel. Repose-toi bien.";
+  let calcul=p.replace(/c'est quoi|combien font|calcule|calculer|=|\?/g,"").replace(/x/g,"*").replace(/,/g,".").trim();
+  if(/^[0-9\s\+\-\*\/\(\)\.]+$/.test(calcul) && /[\+\-\*\/]/.test(calcul)){ try{ let r=eval(calcul); return calcul+" = "+r+"."; }catch(e){} }
+  return "Oui, je t'écoute bien. Continue, dis-moi tout ce que tu veux, on en discute.";
 }
-
-function partager(){
-  let texte = document.getElementById("chat").innerText;
-  window.open("https://wa.me/?text=" + encodeURIComponent(texte));
-}
-function copier(){
-  let texte = document.getElementById("chat").innerText;
-  navigator.clipboard.writeText(texte);
-  alert("Copié !");
-}
+function partager(){ window.open("https://wa.me/?text="+encodeURIComponent(document.getElementById("chat").innerText)); }
+function copier(){ navigator.clipboard.writeText(document.getElementById("chat").innerText); alert("Copié !"); }
 </script>
-
 </body>
 </html>
